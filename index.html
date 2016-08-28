@@ -1,0 +1,71 @@
+<head>
+ <link rel="stylesheet" href="http://s.mlcdn.co/animate.css">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+<style>
+img{
+	width:100%;
+}
+img:hover {
+	opacity: 0.5;
+}
+body {
+	background-color: blue;
+}
+h1 {
+	color: black;
+}
+p{
+	color:black;
+}
+</style>
+</head>
+
+<body>
+	<div class="text-center">
+		<h1 style="font-size: 50px">Giphy Photo Search</h1>
+	</div>
+	<div class="text-center">
+		<input class="search" placeholder="Search a gif">
+		<input class="number" type="number" placeholder="number of images">
+		<button class="pure_button">Enter</button>
+	</div>
+	<div class="gif " >
+	</div>
+</body>
+<script>
+$('.pure_button').click(function(e) {
+	e.preventDefault()
+	console.log("click");
+	var number= $(".number").val()
+	$.ajax({
+		url: "http://api.giphy.com/v1/gifs/search?q=" + $(".search").val() + "&api_key=dc6zaTOxFJmzC",
+		type: "GET",
+		success: function(response) {
+			console.log("This works too")
+			var images=""
+			console.log(response)
+			images+="<div class='row' >"
+			for(var i = 0; i < number; i++) {
+				if(response.data[i].rating != 'r' || response.data[i].rating != 'pg-13'){
+
+					if(response.data[i].rating == 'y'){
+						images+="<div style='display:inline-block; width: 25%;'> <img style='border: 5px solid yellow' src='" + response.data[i].images.original.url + " '/>" 
+						images += "<h2 class='animate bounceIn' style='color:yellow'>" + response.data[i].rating + "</h2></div>"
+					}
+					if(response.data[i].rating == 'g'){
+						images+="<div style='display:inline-block; width: 25%;'> <img style='border: 5px solid green' src='" + response.data[i].images.original.url + " '/>" 
+						images += "<h2 class='animate bounceIn' style='color:green'>" + response.data[i].rating + "</h2></div>"
+					}if(response.data[i].rating == 'pg'){
+						images+="<div style='display:inline-block; width: 25%;'> <img style='border: 5px solid orange' src='" + response.data[i].images.original.url + " '/>" 
+						images += "<h2 class='animate bounceIn' style='color:orange'>" + response.data[i].rating + "</h2></div>"
+					}
+				}
+			}
+			images += "</div>"
+			$(".gif").html(images)
+		}
+	})
+});
+</script>
